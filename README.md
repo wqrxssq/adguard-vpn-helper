@@ -31,6 +31,25 @@ export TOKEN=<your token>
 python3 -m src.app
 ```
 
+## Запуск в докерконтейнере
+
+Перед запуском убедитесь что у вас установлен `Docker` или `Docker Desktop`.
+
+1) Сборка контейнера:
+
+```bash
+docker build -t adguard-helper .
+```
+
+2) Запуск контейнера: (С пробросом токена для бота)
+
+```bash
+docker run -d \
+  -p 8000:8000 \
+  -e TOKEN=<your_secret_token> \
+  adguard-helper
+```
+
 ## Ручной просмотр бд
 
 Войти в бд можно с помощью утилиты `sqlite3`:
