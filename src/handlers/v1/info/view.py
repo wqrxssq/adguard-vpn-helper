@@ -2,7 +2,7 @@ import asyncio
 from telegram import Update
 from telegram.ext import CommandHandler, ContextTypes
 
-from ....utils.format import format_account
+from src.utils.format import format_account
 
 async def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
     repo = context.bot_data["repo"]

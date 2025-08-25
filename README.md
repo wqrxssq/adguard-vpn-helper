@@ -50,6 +50,27 @@ docker run -d \
   adguard-helper
 ```
 
+## Запуск тестов
+
+1) Установите виртуальное окружение:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+2) Установите зависимости:
+
+```bash
+pip install -r requirements.txt
+```
+
+3) Запустите тесты:
+
+```bash
+python3 -m pytest -q
+```
+
 ## Ручной просмотр бд
 
 Войти в бд можно с помощью утилиты `sqlite3`:
