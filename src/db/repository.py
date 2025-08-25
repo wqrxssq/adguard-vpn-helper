@@ -19,17 +19,14 @@ class Repository:
         """
         today = date.today()
         if days_left < 0 or days_left > 31:  # sanity cap (31 день)
-            raise ValueError("days_left should be >=0 and reasonable")
+            raise ValueError("days_left should be >=0 and <= 31")
         date_end = today + timedelta(days=days_left)
         date_start = date_end - timedelta(days=30)
         s = self.Session()
         try:
             existing = s.get(Account, (user_id, email))
             if existing:
-                # TODO: должно быть сообщение об ошибке
-                existing.date_start = date_start.isoformat()
-                existing.date_end = date_end.isoformat()
-                existing.is_used = 0
+                raise ValueError(f"Account with email={email} already exists")
             else:
                 acc = Account(
                     user_id=user_id,
@@ -93,11 +90,10 @@ class Repository:
             - date_end := today + 30 days
         Возвращает количество обновлённых записей.
         """
-        # TODO: нужно добавить, что все таки если сервер не работал, то обновление прошло успешно
         s = self.Session()
         try:
             today = date.today()
-            accounts = s.query(Account).filter(Account.date_end <= today.isoformat()).all()
+            accounts = s.query(Account).filter(Account.date_end < today.isoformat()).all()
             updated = 0
             for acc in accounts:
                 acc.is_used = 0
