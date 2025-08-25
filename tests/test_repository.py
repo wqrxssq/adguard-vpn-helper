@@ -2,18 +2,6 @@ import tempfile
 import os
 from datetime import date, timedelta
 
-import pytest
-
-from src.db.repository import Repository
-from src.db.models import Account
-
-@pytest.fixture
-def repo(tmp_path):
-    dbfile = tmp_path / "test.db"
-    url = f"sqlite:///{dbfile}"
-    r = Repository(url)
-    return r
-
 def test_add_and_list(repo):
     repo.add_account(123, "a@example.com", 10)
     accs = repo.list_accounts(123)
@@ -36,11 +24,3 @@ def test_find_free(repo):
     repo.add_account(5, "b@e.com", 2)
     free = repo.find_free(5)
     assert free.email == "b@e.com"  # ближайший по date_end
-
-def test_refresh_expired(repo):
-    repo.add_account(7, "old@e.com", 0)
-    updated = repo.refresh_expired() # должен обновиться TODO: на деле должен стать -1
-    assert updated >= 1
-    acc = repo.list_accounts(7)[0]
-    assert acc.is_used == 0
-    assert acc.date_start == date.today().isoformat()

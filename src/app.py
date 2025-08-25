@@ -33,11 +33,8 @@ def main():
     })
 
     refresher = Refresher(repo)
-
-    # start refresher when launching app:
     refresher.start()
 
-    # attach to app for graceful shutdown if wanted
     app.bot_data["repo"] = repo
     app.bot_data["refresher"] = refresher
 
