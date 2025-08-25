@@ -5,10 +5,13 @@ from .config import load_settings
 
 from .db.repository import Repository
 
-from .handlers.v1.hello.view import hello_handler
+from .handlers.v1.start.view import start_handler
 from .handlers.v1.echo.view import echo_handler
-
-from .handlers.v1 import commands as cmd
+from .handlers.v1.add_mail.view import add_mail_handler
+from .handlers.v1.delete_mail.view import delete_mail_handler
+from .handlers.v1.find_free.view import find_free_handler
+from .handlers.v1.info.view import info_handler
+from .handlers.v1.mark_used.view import mark_used_handler
 
 from .scheduler.refresher import Refresher
 
@@ -21,22 +24,14 @@ def main():
     settings = load_settings()
 
     repo = Repository(settings.database_url)
-    cmd.set_repository(repo)
 
     app = ApplicationBuilder().token(settings.telegram_token).build()
+    app.add_handlers({
+        0: [start_handler(), echo_handler(), add_mail_handler(), 
+            delete_mail_handler(), find_free_handler(), 
+            info_handler(), mark_used_handler()]
+    })
 
-    # register handlers
-    app.add_handler(CommandHandler("start", cmd.start))
-    app.add_handler(CommandHandler("add_mail", cmd.add_mail))
-    app.add_handler(CommandHandler("info", cmd.info))
-    app.add_handler(CommandHandler("mark_used", cmd.mark_used))
-    app.add_handler(CommandHandler("delete_mail", cmd.delete_mail))
-    app.add_handler(CommandHandler("find_free", cmd.find_free))
-
-    app.add_handler(handler=hello_handler(), group=0)
-    app.add_handler(handler=echo_handler(), group=0)
-
-    # setup refresher
     refresher = Refresher(repo)
 
     # start refresher when launching app:

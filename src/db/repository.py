@@ -19,7 +19,7 @@ class Repository:
         """
         today = date.today()
         if days_left < 0 or days_left > 31:  # sanity cap (31 день)
-            raise ValueError("days_left should be >=0 and reasonable")
+            raise ValueError("days_left should be >=0 and <= 31")
         date_end = today + timedelta(days=days_left)
         date_start = date_end - timedelta(days=30)
         s = self.Session()
